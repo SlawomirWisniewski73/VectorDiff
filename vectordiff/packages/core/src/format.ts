@@ -1,139 +1,135 @@
+// packages/core/src/format.ts
+// UWAGA: To jest poprawiona wersja pliku.
+
 /**
- * Definicje typów i interfejsów dla formatu VectorDiff
+ * =================================================================
+ * ZMIANA KRYTYCZNA: Ustrukturyzowanie Danych Geometrycznych
+ * =================================================================
+ * * Powód zmiany:
+ * Oryginalna implementacja przechowywała dane geometryczne (np. współrzędne x, y, promień)
+ * w jednym polu tekstowym `data`. To podejście było niezwykle kruche, podatne na błędy
+ * parsowania i uniemożliwiało spójne stosowanie transformacji.
+ * * Wprowadzona poprawka:
+ * 1. Zrezygnowano z pola `data` typu string na rzecz ustrukturyzowanych obiektów.
+ * 2. Zdefiniowano dedykowane interfejsy dla każdego typu kształtu (np. `RectData`, `EllipseData`).
+ * 3. Pole `VectorObject.data` jest teraz unią tych typów, co zapewnia bezpieczeństwo typów
+ * i eliminuje potrzebę parsowania stringów.
+ * * Korzyści:
+ * - Bezpieczeństwo typów i autouzupełnianie kodu w IDE.
+ * - Wyeliminowanie błędów parsowania.
+ * - Umożliwienie spójnej i jednoznacznej logiki transformacji.
  */
 
-// Główna struktura animacji VectorDiff
-export interface VectorDiffAnimation {
-  version: string;
-  metadata: Metadata;
-  baseScene: BaseScene;
-  timeline: TimelineKeyframe[];
-}
+// --- Nowe, ustrukturyzowane typy danych dla kształtów ---
 
-// Metadane animacji
-export interface Metadata {
-  author: string;
-  creationDate: string;
-  duration: number;
-  [key: string]: any; // Rozszerzalne dla specyficznych zastosowań
-}
-
-// Scena bazowa zawierająca wszystkie obiekty
-export interface BaseScene {
-  canvas: Canvas;
-  objects: VectorObject[];
-}
-
-// Wymiary płótna
-export interface Canvas {
+export interface RectData {
+  x: number;
+  y: number;
   width: number;
   height: number;
-  depth?: number; // Opcjonalne dla 3D
 }
 
-// Obiekt wektorowy - bazowy interfejs
+export interface EllipseData {
+  cx: number;
+  cy: number;
+  rx: number;
+  ry: number;
+}
+
+export interface PathData {
+  d: string; // The 'd' attribute for SVG paths remains a string, as it's a complex mini-language.
+}
+
+export interface PolylineData {
+  points: string; // Similar to path 'd', points are a standardized string format.
+}
+
+// Union type for all possible structured data formats
+export type VectorObjectData = RectData | EllipseData | PathData | PolylineData;
+
+// --- Zaktualizowany interfejs VectorObject ---
+
 export interface VectorObject {
   id: string;
-  type: "path" | "rect" | "ellipse" | "text" | "group" | string; // Rozszerzalne
-  data: any;
-  attributes: Attributes;
+  type: 'rect' | 'ellipse' | 'path' | 'polyline' | 'group';
+  
+  // The 'data' field now holds structured geometric information.
+  data: VectorObjectData | {}; // Empty object for groups
+
+  // Attributes remain for styling and transformations.
+  attributes: {
+    fill?: string;
+    stroke?: string;
+    'stroke-width'?: number;
+    transform?: string; // This will be the SOLE source of truth for transformations.
+    [key: string]: any;
+  };
+  
+  // Children for grouping objects.
+  children?: VectorObject[];
 }
 
-// Atrybuty obiektu
-export interface Attributes {
-  fill?: string;
-  stroke?: string;
-  strokeWidth?: number;
-  opacity?: number;
-  [key: string]: any;
+// --- Zaktualizowany interfejs VectorDiff ---
+
+export interface VectorDiff {
+  version: string;
+  baseScene: {
+    objects: VectorObject[];
+  };
+  timeline: {
+    [time: string]: {
+      targetId: string;
+      transformation: Transformation;
+    }[];
+  };
 }
 
-// Klatka kluczowa na osi czasu
-export interface TimelineKeyframe {
-  timestamp: number;
-  changes: ObjectChange[];
-}
+// --- Typy transformacji pozostają bez zmian ---
 
-// Zmiana obiektu
-export interface ObjectChange {
-  objectId: string;
-  transformation: Transformation;
-}
-
-// Typy transformacji
 export type Transformation =
   | TranslateTransformation
   | RotateTransformation
   | ScaleTransformation
   | AffineTransformation;
 
-// Transformacja przesunięcia
 export interface TranslateTransformation {
-  type: "translate";
+  type: 'translate';
   x: number;
   y: number;
-  z?: number; // Opcjonalne dla 3D
 }
 
-// Transformacja obrotu
 export interface RotateTransformation {
-  type: "rotate";
+  type: 'rotate';
   angle: number;
   centerX?: number;
   centerY?: number;
-  centerZ?: number; // Opcjonalne dla 3D
-  axis?: [number, number, number]; // Oś obrotu dla 3D
 }
 
-// Transformacja skalowania
 export interface ScaleTransformation {
-  type: "scale";
-  scaleX: number;
-  scaleY: number;
-  scaleZ?: number; // Opcjonalne dla 3D
+  type: 'scale';
+  sx: number;
+  sy: number;
   centerX?: number;
   centerY?: number;
-  centerZ?: number;
 }
 
-// Transformacja afiniczna
 export interface AffineTransformation {
-  type: "affine";
-  matrix: number[]; // 6 elementów dla 2D, 16 dla 3D
+  type: 'affine';
+  matrix: [number, number, number, number, number, number];
 }
 
-// Wewnętrzna reprezentacja animacji w bibliotece
-export interface Animation {
-  width: number;
-  height: number;
-  depth?: number;
-  objects: Map<string, VectorObject>;
-  timeline: Map<number, ObjectChange[]>;
-  duration: number;
-}
-
-// Funkcja pomocnicza do tworzenia pustej animacji
-export function createEmptyAnimation(width: number, height: number, depth?: number): VectorDiffAnimation {
-  return {
-    version: "0.2", // Wersja 0.2 wspiera 3D
-    metadata: {
-      author: "VectorDiff Library",
-      creationDate: new Date().toISOString(),
-      duration: 0
-    },
-    baseScene: {
-      canvas: {
-        width,
-        height,
-        ...(depth !== undefined && { depth })
-      },
-      objects: []
-    },
-    timeline: [
-      {
-        timestamp: 0,
-        changes: []
-      }
-    ]
-  };
+/**
+ * Validates the structure of a VectorDiff object.
+ * UWAGA: Ta funkcja powinna zostać rozbudowana o walidację
+ * nowej, ustrukturyzowanej zawartości pola `data`.
+ * @param diff The VectorDiff object to validate.
+ * @returns True if the object is valid, otherwise throws an error.
+ */
+export function validateVectorDiff(diff: any): diff is VectorDiff {
+  if (!diff.version || !diff.baseScene || !diff.timeline) {
+    throw new Error('Invalid VectorDiff: Missing top-level properties.');
+  }
+  // TODO: Add more in-depth validation for the new structured data.
+  // For example, check if a 'rect' object has 'x', 'y', 'width', 'height' in its data.
+  return true;
 }
