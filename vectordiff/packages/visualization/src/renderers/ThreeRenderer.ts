@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { 
-  VectorDiffAnimation, 
+  VectorDiff, 
   VectorObject,
   Transformation 
 } from '@vectordiff/core';
@@ -36,10 +36,10 @@ export class ThreeRenderer {
   private renderer: THREE.WebGLRenderer;
   private controls?: OrbitControls;
   private animation: VectorDiffAnimation | null = null;
-  private objects: Map<string, THREE.Object3D> = new Map();
+  private objects: Map<string, THREE.Object3D>;
   private animationMixer?: THREE.AnimationMixer;
   private clock: THREE.Clock = new THREE.Clock();
-  
+  private mixer: THREE.AnimationMixer | null = null;
   // Stan animacji
   private currentTime: number = 0;
   private isPlaying: boolean = false;
@@ -365,128 +365,102 @@ export class ThreeRenderer {
     return object3D;
   }
   
-  /**
-   * Przygotowuje animacje Three.js na podstawie timeline
+   /**
+   * REWRITTEN: Prepares animation clips from the VectorDiff timeline.
    */
-  private prepareAnimations(): void {
-    if (!this.animation) return;
-    
-    // Tworzymy AnimationMixer
-    this.animationMixer = new THREE.AnimationMixer(this.scene);
-    
-    // Dla każdego obiektu tworzymy track animacji
-    const tracks: THREE.KeyframeTrack[] = [];
-    
-    // Grupujemy transformacje po obiektach
-    const objectTransforms = new Map<string, Array<{time: number, transform: Transformation}>>();
-    
-    this.animation.timeline.forEach(keyframe => {
-      keyframe.changes.forEach(change => {
-        if (!objectTransforms.has(change.objectId)) {
-          objectTransforms.set(change.objectId, []);
-        }
-        objectTransforms.get(change.objectId)!.push({
-          time: keyframe.timestamp / 1000, // Three.js używa sekund
-          transform: change.transformation
+  private prepareAnimations(diff: VectorDiff): THREE.AnimationClip[] {
+    const tracksByObject: Map<string, {
+      position: { times: number[], values: number[] },
+      quaternion: { times: number[], values: number[] },
+      scale: { times: number[], values: number[] }
+    }> = new Map();
+
+    const timeline = diff.timeline;
+    const sortedTimes = Object.keys(timeline).map(parseFloat).sort((a, b) => a - b);
+
+    // Initialize state for all objects at time 0
+    diff.baseScene.objects.forEach(obj => {
+      const threeObj = this.objects.get(obj.id);
+      if (threeObj) {
+        tracksByObject.set(obj.id, {
+          position: { times: [0], values: [...threeObj.position.toArray()] },
+          quaternion: { times: [0], values: [...threeObj.quaternion.toArray()] },
+          scale: { times: [0], values: [...threeObj.scale.toArray()] },
         });
-      });
+      }
     });
-    
-    // Tworzymy tracki dla każdego obiektu
-    objectTransforms.forEach((transforms, objectId) => {
-      const object3D = this.objects.get(objectId);
-      if (!object3D) return;
+
+    // --- NEW ACCUMULATION LOGIC ---
+    // Keep track of the current state of each object as we iterate through time.
+    const currentStates: Map<string, { pos: THREE.Vector3, quat: THREE.Quaternion, scale: THREE.Vector3 }> = new Map();
+    this.objects.forEach((obj, id) => {
+        currentStates.set(id, {
+            pos: obj.position.clone(),
+            quat: obj.quaternion.clone(),
+            scale: obj.scale.clone(),
+        });
+    });
+
+    for (const time of sortedTimes) {
+      const frameTransformations = timeline[time];
       
-      // Przygotowujemy tablice dla różnych typów transformacji
-      const positionTimes: number[] = [];
-      const positionValues: number[] = [];
-      const rotationTimes: number[] = [];
-      const rotationValues: number[] = [];
-      const scaleTimes: number[] = [];
-      const scaleValues: number[] = [];
-      
-      // Przetwarzamy transformacje
-      transforms.forEach(({time, transform}) => {
-        switch (transform.type) {
-          case 'translate':
-            positionTimes.push(time);
-            positionValues.push(
-              object3D.position.x + transform.x,
-              object3D.position.y + transform.y,
-              object3D.position.z + (transform.z || 0)
-            );
-            break;
-            
-          case 'rotate':
-            rotationTimes.push(time);
-            // Konwersja stopni na radiany
-            const radians = transform.angle * Math.PI / 180;
-            if (transform.axis) {
-              // Rotacja wokół określonej osi
-              const quaternion = new THREE.Quaternion();
-              quaternion.setFromAxisAngle(
-                new THREE.Vector3(...transform.axis).normalize(),
-                radians
-              );
-              rotationValues.push(
-                quaternion.x,
-                quaternion.y,
-                quaternion.z,
-                quaternion.w
-              );
-            } else {
-              // Domyślna rotacja wokół Z
-              rotationValues.push(0, 0, Math.sin(radians/2), Math.cos(radians/2));
+      for (const frame of frameTransformations) {
+        const { targetId, transformation } = frame;
+        const state = currentStates.get(targetId);
+        const tracks = tracksByObject.get(targetId);
+
+        if (state && tracks) {
+          // Apply transformation to the CURRENT state to get the NEW absolute state
+          switch (transformation.type) {
+            case 'translate':
+              state.pos.x += transformation.x;
+              state.pos.y += transformation.y;
+              // z-axis is assumed to be 0 for 2D->3D mapping
+              break;
+            case 'rotate': {
+              // Create a quaternion for the rotation around the Z-axis
+              const rotationQuaternion = new THREE.Quaternion();
+              rotationQuaternion.setFromAxisAngle(new THREE.Vector3(0, 0, 1), THREE.MathUtils.degToRad(transformation.angle));
+              
+              // Correctly accumulate rotations by multiplying quaternions
+              state.quat.premultiply(rotationQuaternion);
+              break;
             }
-            break;
-            
-          case 'scale':
-            scaleTimes.push(time);
-            scaleValues.push(
-              transform.scaleX,
-              transform.scaleY,
-              transform.scaleZ || 1
-            );
-            break;
+            case 'scale':
+              state.scale.x *= transformation.sx;
+              state.scale.y *= transformation.sy;
+              break;
+            // 'affine' is complex and would require matrix decomposition. Skipped for brevity.
+          }
+
+          // Add the NEW ABSOLUTE state as a keyframe at the current time
+          tracks.position.times.push(time);
+          tracks.position.values.push(...state.pos.toArray());
+
+          tracks.quaternion.times.push(time);
+          tracks.quaternion.values.push(...state.quat.toArray());
+
+          tracks.scale.times.push(time);
+          tracks.scale.values.push(...state.scale.toArray());
         }
-      });
-      
-      // Tworzymy tracki jeśli są dane
-      if (positionTimes.length > 0) {
-        tracks.push(new THREE.VectorKeyframeTrack(
-          `${object3D.uuid}.position`,
-          positionTimes,
-          positionValues
-        ));
       }
-      
-      if (rotationTimes.length > 0) {
-        tracks.push(new THREE.QuaternionKeyframeTrack(
-          `${object3D.uuid}.quaternion`,
-          rotationTimes,
-          rotationValues
-        ));
-      }
-      
-      if (scaleTimes.length > 0) {
-        tracks.push(new THREE.VectorKeyframeTrack(
-          `${object3D.uuid}.scale`,
-          scaleTimes,
-          scaleValues
-        ));
-      }
-    });
-    
-    // Tworzymy AnimationClip jeśli są jakieś tracki
-    if (tracks.length > 0) {
-      const clip = new THREE.AnimationClip(
-        'VectorDiffAnimation',
-        this.animation.metadata.duration / 1000,
-        tracks
-      );
-      const action = this.animationMixer.clipAction(clip);
-      action.play();
     }
+
+    // Create AnimationClips from the generated tracks
+    const clips: THREE.AnimationClip[] = [];
+    tracksByObject.forEach((tracks, objectId) => {
+      const objectName = this.objects.get(objectId)?.name;
+      if (!objectName) return;
+
+      const posTrack = new THREE.VectorKeyframeTrack(`${objectName}.position`, tracks.position.times, tracks.position.values);
+      const rotTrack = new THREE.QuaternionKeyframeTrack(`${objectName}.quaternion`, tracks.quaternion.times, tracks.quaternion.values);
+      const scaleTrack = new THREE.VectorKeyframeTrack(`${objectName}.scale`, tracks.scale.times, tracks.scale.values);
+
+      const clip = new THREE.AnimationClip(`anim_${objectId}`, -1, [posTrack, rotTrack, scaleTrack]);
+      clips.push(clip);
+    });
+
+    return clips;
   }
   
   /**
