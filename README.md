@@ -1,5 +1,9 @@
 # VectorDiff
+--
+## A. VectorDiff – Biblioteka i format
 
+## B. VectorDiff – Język specyfikacji formalnej
+--
 
 ## English version --> readme_ENG.md
 
