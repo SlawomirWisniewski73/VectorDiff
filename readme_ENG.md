@@ -27,7 +27,8 @@ vectordiff/
 We encourage collaboration! See `CONTRIBUTING.md` for rules and guidelines.
 
 ### License
-This project is licensed under the MIT License - see the `LICENSE` file for details.
+- This project is released under GNU AFFERO GENERAL PUBLIC LICENSE as of July 2, 06.40PM
+- Project downloaded before July 2, 06.40PM is released under MIT license - see `LICENSE` file for details.
 
 ---
 
