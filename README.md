@@ -1,5 +1,7 @@
 # VectorDiff
 
+English version --> readme_ENG.md
+
 ## Część A: VectorDiff – Biblioteka i format
 
 VectorDiff to innowacyjny format animacji wektorowych, który optymalizuje zasoby poprzez śledzenie i zapisywanie tylko zmian między klatkami. Szczególnie przydatny dla animacji generowanych przez AI oraz zastosowań medycznych.
