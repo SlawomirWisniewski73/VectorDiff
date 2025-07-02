@@ -1,4 +1,8 @@
 # VectorDiff
+--
+## A. VectorDiff - The Library and Format
+## B. VectorDiff - The Formal Specification Language
+--
 
 ## Part A: VectorDiff - The Library and Format
 
