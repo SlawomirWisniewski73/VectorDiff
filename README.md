@@ -29,7 +29,8 @@ vectordiff/
 Zachęcamy do współpracy! Zobacz `CONTRIBUTING.md` dla zasad i wskazówek.
 
 ### Licencja
-Ten projekt jest udostępniany na licencji MIT - szczegóły w pliku `LICENSE`.
+Ten projekt jest udostępniany na licencji GNU AFFERO GENERAL PUBLIC LICENSE od 2 lipca 06.40PM
+Projekt pobrany do 2 lipca 06.40PM jest udostępniany na licencji MIT - szczegóły w pliku `LICENSE`.
 
 ---
 
