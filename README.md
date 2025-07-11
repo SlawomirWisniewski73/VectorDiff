@@ -6,6 +6,8 @@
 --
 
 ## English version --> readme_ENG.md
+## Strona projektu --> https://vectordiff.org/
+--
 
 
 ## Część A: VectorDiff – Biblioteka i format
