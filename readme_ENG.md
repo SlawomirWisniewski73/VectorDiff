@@ -34,6 +34,31 @@ We encourage collaboration! See `CONTRIBUTING.md` for rules and guidelines.
 - This project is released under GNU AFFERO GENERAL PUBLIC LICENSE as of July 2, 06.40PM
 - Project downloaded before July 2, 06.40PM is released under MIT license - see `LICENSE` file for details.
 
+**VectorDiff is available under a dual licensing system, allowing you to choose the best solution for your project.**
+
+#### OPTION 1: AGPL-3.0 LICENSE (FREE)
+- ✅ Full access to source code
+- ✅ Modification and distribution rights
+- ✅ Perfect for open source projects
+- ❌ Must share modifications
+- ❌ Must preserve AGPL-3.0 license
+
+#### OPTION 2: COMMERCIAL LICENSE
+- ✅ No obligation to share code
+- ✅ Integration with proprietary software
+- ✅ Dedicated technical support
+- ✅ SLA guarantees
+- ✅ Modification rights without disclosure
+
+#### HOW TO CHOOSE?
+- Your code will be open source → AGPL-3.0
+- Building commercial product → Commercial license
+- Need technical support → Commercial license
+- Have questions → Contact us
+
+CONTACT: sa.wisniewski@sci4biz.edu.pl
+
+
 ---
 
 ## Part B: VectorDiff - The Formal Specification Language
