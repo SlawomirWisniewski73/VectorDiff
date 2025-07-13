@@ -39,6 +39,35 @@ Zachęcamy do współpracy! Zobacz `CONTRIBUTING.md` dla zasad i wskazówek.
 ### Licencja
 - Ten projekt jest udostępniany na licencji GNU AFFERO GENERAL PUBLIC LICENSE od 2 lipca 06.40PM
 - Projekt pobrany do 2 lipca 06.40PM jest udostępniany na licencji MIT - szczegóły w pliku `LICENSE`.
+- W dniu 14/7/25 wprowadzono dual-licensing
+- DUAL LICENSING VECTORDIFF
+Elastyczność dla Każdego Projektu
+
+**VectorDiff jest dostępny pod podwójnym systemem licencjonowania, który pozwala na wybór najlepszego rozwiązania dla Twojego projektu.**
+
+
+#### OPCJA 1: LICENCJA AGPL-3.0 (BEZPŁATNA)
+- ✅ Pełny dostęp do kodu źródłowego
+- ✅ Możliwość modyfikacji i dystrybucji
+- ✅ Idealne dla projektów open source
+- ❌ Wymóg udostępnienia modyfikacji
+- ❌ Wymóg zachowania licencji AGPL-3.0
+
+#### OPCJA 2: LICENCJA KOMERCYJNA
+- ✅ Brak obowiązku udostępniania kodu
+- ✅ Możliwość integracji z proprietary software
+- ✅ Dedykowane wsparcie techniczne
+- ✅ Gwarancje SLA
+- ✅ Prawo do modyfikacji bez ujawniania
+
+**JAK WYBRAĆ?**
+- Twój kod będzie open source → AGPL-3.0
+- Budujesz komercyjny produkt → Licencja komercyjna
+- Potrzebujesz wsparcia technicznego → Licencja komercyjna
+- Masz wątpliwości → Skontaktuj się z nami
+
+KONTAKT: sa.wisniewski@sci4biz.edu.pl
+
 
 ---
 
