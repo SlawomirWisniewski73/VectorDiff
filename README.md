@@ -14,6 +14,10 @@
 
 VectorDiff to innowacyjny format animacji wektorowych, który optymalizuje zasoby poprzez śledzenie i zapisywanie tylko zmian między klatkami. Szczególnie przydatny dla animacji generowanych przez AI oraz zastosowań medycznych.
 
+Ale
+
+Również uniwersalny format dla danych dynamicznych z możliwością wykorzystania jako meta-język dla AI
+
 ### How to cite:
 Wiśniewski, Sławomir (2025). <b>VectorDiff: A manifesto for a differential, semantically rich vector animation format for scientific and AI-driven visualization</b>. Figshare preprint. https://doi.org/10.6084/m9.figshare.29410109
 
