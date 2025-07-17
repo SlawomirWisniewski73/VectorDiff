@@ -1,4 +1,4 @@
-name: CI Build and Test
+name: CI Diagnostic
 
 on:
   push:
@@ -7,25 +7,29 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  diagnose:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # POPRAWKA: Używamy Node.js w wersji 20
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # Krok aktualizacji npm nie jest już potrzebny!
+      - name: 1. Display Recursive File Structure
+        run: ls -R
 
-      - name: Install Dependencies
-        run: npm install
+      - name: 2. Display Root package.json
+        run: cat package.json
 
-      - name: Build Project
-        run: npm run build -ws
+      - name: 3. Display Core package.json
+        run: |
+          echo "--- Contents of packages/core/package.json ---"
+          cat packages/core/package.json
 
-      - name: Run Tests
-        run: npm run test
+      - name: 4. Display Visualization package.json
+        run: |
+          echo "--- Contents of packages/visualization/package.json ---"
+          cat packages/visualization/package.json
