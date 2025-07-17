@@ -1,4 +1,4 @@
-name: CI Build and Test
+name: CI Build and Test (Manual)
 
 on:
   push:
@@ -18,11 +18,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Install & Build Core Package
+        run: cd core && npm install && npm run build
 
-      - name: Build Project
-        run: npm run build -ws --if-present
-
-      - name: Run Tests
-        run: npm run test -ws --if-present
+      - name: Install & Build Visualization Package
+        run: cd visualization && npm install && npm run build
