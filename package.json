@@ -1,0 +1,16 @@
+{
+  "name": "vectordiff-monorepo",
+  "version": "1.0.0",
+  "description": "Monorepo for the VectorDiff project",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build -ws",
+    "test": "npm run test -ws"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
+}
