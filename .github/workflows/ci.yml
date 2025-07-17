@@ -21,6 +21,9 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: List Workspaces (Diagnostic)
+        run: npm workspaces list
+
       - name: Build Project
         run: npm run build
 
