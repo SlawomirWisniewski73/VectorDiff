@@ -1,4 +1,4 @@
-name: CI Diagnostic
+name: CI Build and Test
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  diagnose:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -18,18 +18,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 1. Display Recursive File Structure
-        run: ls -R
+      - name: Install Dependencies
+        run: npm install
 
-      - name: 2. Display Root package.json
-        run: cat package.json
+      - name: Build Project
+        run: npm run build -ws --if-present
 
-      - name: 3. Display Core package.json
-        run: |
-          echo "--- Contents of packages/core/package.json ---"
-          cat packages/core/package.json
-
-      - name: 4. Display Visualization package.json
-        run: |
-          echo "--- Contents of packages/visualization/package.json ---"
-          cat packages/visualization/package.json
+      - name: Run Tests
+        run: npm run test -ws --if-present
