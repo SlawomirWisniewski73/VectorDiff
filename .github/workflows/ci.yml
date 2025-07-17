@@ -13,15 +13,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # POPRAWKA: Używamy Node.js w wersji 20
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
-      # ---- TO JEST KLUCZOWA POPRAWKA ----
-      - name: Update npm to the latest version
-        run: npm install -g npm@latest
-      # ----------------------------------
+      # Krok aktualizacji npm nie jest już potrzebny!
 
       - name: Install Dependencies
         run: npm install
