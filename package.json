@@ -4,8 +4,7 @@
   "description": "Monorepo for the VectorDiff project",
   "private": true,
   "workspaces": [
-    "packages/core",
-    "packages/visualization"
+    "src/*"
   ],
   "scripts": {
     "build": "npm run build -ws --if-present",
