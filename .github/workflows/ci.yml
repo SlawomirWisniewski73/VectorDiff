@@ -18,14 +18,16 @@ jobs:
         with:
           node-version: '18'
 
+      # ---- TO JEST KLUCZOWA POPRAWKA ----
+      - name: Update npm to the latest version
+        run: npm install -g npm@latest
+      # ----------------------------------
+
       - name: Install Dependencies
         run: npm install
 
-      - name: List Workspaces (Diagnostic)
-        run: npm workspaces list
-
       - name: Build Project
-        run: npm run build
+        run: npm run build -ws
 
       - name: Run Tests
         run: npm run test
