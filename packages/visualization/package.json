@@ -14,7 +14,5 @@
   },
   "devDependencies": {
     "@types/three": "^0.152.0"
-  },
-  "author": "Sławomir Wiśniewski",
-  "license": "MIT"
+  }
 }
