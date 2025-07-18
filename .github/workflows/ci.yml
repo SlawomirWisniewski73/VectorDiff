@@ -9,22 +9,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./vectordiff
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js v20
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # Zamiast aktualizować globalnie, używamy npx do uruchomienia najnowszej wersji npm
-      - name: Install Dependencies with NPX
-        run: npx npm@latest install
+      - name: Install Dependencies
+        run: npm install
 
       - name: Build Project
         run: npm run build -ws --if-present
