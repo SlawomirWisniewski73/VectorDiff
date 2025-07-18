@@ -22,11 +22,9 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Force Update npm to Latest Version
-        run: npm install -g npm@latest
-
-      - name: Install Dependencies with Modern npm
-        run: npm install
+      # Zamiast aktualizować globalnie, używamy npx do uruchomienia najnowszej wersji npm
+      - name: Install Dependencies with NPX
+        run: npx npm@latest install
 
       - name: Build Project
         run: npm run build -ws --if-present
