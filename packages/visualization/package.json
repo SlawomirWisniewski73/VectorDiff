@@ -1,7 +1,6 @@
 {
   "name": "@vectordiff/visualization",
   "version": "0.1.0",
-  "description": "Visualization components for VectorDiff animations",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
