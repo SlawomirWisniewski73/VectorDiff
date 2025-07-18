@@ -7,8 +7,7 @@ function App() {
   useEffect(() => {
     if (containerRef.current) {
       const renderer = new SurgicalRenderer({ container: containerRef.current });
-      renderer.camera.position.set(50, 50, 100); // Dostęp do kamery jest poprawny
-      console.log('Surgical console renderer initialized');
+      console.log('Surgical console renderer initialized', renderer.camera);
     }
   }, []);
 
