@@ -7,8 +7,7 @@ function App() {
   useEffect(() => {
     if (containerRef.current) {
       const renderer = new MedicalImageRenderer({ container: containerRef.current });
-      renderer.camera.position.set(0, 0, 300); // Dostęp do kamery jest poprawny
-      console.log('Radiology workstation renderer initialized');
+      console.log('Radiology workstation renderer initialized', renderer.camera);
     }
   }, []);
 
