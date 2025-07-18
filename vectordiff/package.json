@@ -11,6 +11,9 @@
     "build": "npm run build -ws --if-present",
     "test": "npm run test -ws --if-present"
   },
+  "engines": {
+    "npm": ">=8.5.0"
+  },
   "devDependencies": {
     "typescript": "^5.2.2"
   }
