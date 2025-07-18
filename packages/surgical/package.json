@@ -8,6 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
-    "@vectordiff/core": "0.2.0"
+    "@vectordiff/core": "0.2.0",
+    "@vectordiff/visualization": "0.1.0"
   }
 }
