@@ -12,7 +12,5 @@
     "@vectordiff/visualization": "0.1.0",
     "dicom-parser": "^1.8.21"
   },
-  "devDependencies": {
-    "@types/dicom-parser": "^1.8.4"
-  }
+  "devDependencies": {}
 }
