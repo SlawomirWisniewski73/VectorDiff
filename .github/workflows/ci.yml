@@ -9,8 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    # TA SEKCJA JEST KLUCZOWA
     defaults:
       run:
         working-directory: ./vectordiff
@@ -23,6 +21,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      # TO JEST KLUCZOWA POPRAWKA
+      - name: Update npm to the latest version
+        run: npm install -g npm@latest
 
       - name: Install Dependencies
         run: npm install
