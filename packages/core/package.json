@@ -1,7 +1,6 @@
 {
   "name": "@vectordiff/core",
   "version": "0.2.0",
-  "description": "Core library for VectorDiff animation format",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
