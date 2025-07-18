@@ -5,7 +5,7 @@
 ## B. VectorDiff – Język specyfikacji formalnej
 --
 
-## English version --> readme_ENG.md
+## English version --> readme_ENG.md 
 ## Strona projektu --> https://vectordiff.org/ 
 --
 
