@@ -1,15 +1,34 @@
-name: Final Diagnostic - List All Files
+name: CI Build and Test
 
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  list-files:
+  build:
     runs-on: ubuntu-latest
+
+    # TA SEKCJA JEST KLUCZOWA
+    defaults:
+      run:
+        working-directory: ./vectordiff
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Display Recursive File Structure
-        run: ls -R
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build -ws --if-present
+
+      - name: Run Tests
+        run: npm run test -ws --if-present
