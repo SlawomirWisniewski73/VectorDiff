@@ -1,83 +1,54 @@
-/**
- * Publiczne API biblioteki VectorDiff Core
- * Ten plik eksportuje wszystkie publiczne elementy biblioteki
- */
-
-// Eksport typów i interfejsów
-export type {
-  // Podstawowe typy
-  VectorDiffAnimation,
-  Animation,
-  VectorObject,
-  Attributes,
-  Metadata,
-  BaseScene,
-  Canvas,
-  TimelineKeyframe,
-  ObjectChange,
-  
-  // Typy transformacji
-  Transformation,
-  TranslateTransformation,
-  RotateTransformation,
-  ScaleTransformation,
-  AffineTransformation
-} from './format';
-
-// Eksport funkcji z format.ts
-export { createEmptyAnimation } from './format';
-
-// Eksport funkcji z parser.ts
-export {
-  validateVectorDiff,
+// Krok 1: Importujemy wszystko, co chcemy wyeksportować
+import {
   parseVectorDiff,
   serializeVectorDiff,
+  validateVectorDiff,
   vectorDiffToAnimation,
   animationToVectorDiff
 } from './parser';
 
-// Eksport funkcji z transformer.ts
-export {
+import {
   applyTransformation,
   detectTransformation
 } from './transformer';
 
-// Eksport funkcji z exporter.ts
-export {
-  // Tworzenie i zarządzanie animacją
+import {
   createAnimation,
-  cloneAnimation,
-  createSampleAnimation,
-  
-  // Dodawanie obiektów
-  addPath,
   addRectangle,
-  addEllipse,
   addCircle,
-  addText,
-  addGroup,
-  
-  // Transformacje
-  addTransformation,
-  
-  // Import/Export
-  exportVectorDiff,
-  loadAnimation,
-  loadAnimationFromJson,
-  exportAnimationToJson
+  addPath,
+  addTransformation
 } from './exporter';
 
-// Eksport wersji biblioteki
-export const VERSION = '0.2.0';
+// Krok 2: Eksportujemy typy i interfejsy
+export * from './format';
 
-// Eksport domyślny - podstawowe funkcje
-export default {
+// Krok 3: Eksportujemy zaimportowane funkcje
+export {
+  parseVectorDiff,
+  serializeVectorDiff,
+  validateVectorDiff,
+  vectorDiffToAnimation,
+  animationToVectorDiff,
+  applyTransformation,
+  detectTransformation,
+  createAnimation,
+  addRectangle,
+  addCircle,
+  addPath,
+  addTransformation
+};
+
+// Krok 4: Tworzymy i eksportujemy obiekt domyślny
+const VectorDiff = {
   createAnimation,
   addRectangle,
   addCircle,
   addPath,
   addTransformation,
-  exportVectorDiff,
-  loadAnimation,
-  VERSION
-}
+  // Dodajemy brakujące funkcje do default export
+  parseVectorDiff,
+  serializeVectorDiff
+};
+
+export default VectorDiff;
