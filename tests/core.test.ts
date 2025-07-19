@@ -1,4 +1,4 @@
-import { Animation, ObjectManager, TransformManager } from '../src/index.js';
+import { Animation, ObjectManager, TransformManager } from '../src';
 describe('VectorDiff Core', () => {
   it('creates simple animation', () => {
     const anim = new Animation(800, 600, { title: 'demo' });
