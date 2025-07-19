@@ -1,11 +1,9 @@
-import { Animation, ObjectManager, TransformManager } from '../src';
-
+import { Animation, ObjectManager, TransformManager } from '../src/index.js';
 describe('VectorDiff Core', () => {
   it('creates simple animation', () => {
     const anim = new Animation(800, 600, { title: 'demo' });
     expect(anim.validate().valid).toBe(true);
   });
-
   it('adds objects and transforms', () => {
     const anim = new Animation(500, 500);
     const objMgr = new ObjectManager(anim);
