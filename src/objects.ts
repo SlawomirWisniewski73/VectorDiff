@@ -1,6 +1,6 @@
-import { VectorObject, ObjectType } from './types.js';
-import { Animation } from './animation.js';
-import { generateId } from './utils.js';
+import { VectorObject, ObjectType } from './types';
+import { Animation } from './animation';
+import { generateId } from './utils';
 export class ObjectManager {
   constructor(private anim: Animation) {}
   add(type: ObjectType, props: Record<string, any>, style: Record<string, any> = {}) {
@@ -10,6 +10,6 @@ export class ObjectManager {
   }
   remove(id: string) {
     const idx = this.anim.objects.findIndex(o => o.id === id);
-    if (idx >= 0) this.anim.objects.splice(idx, 1);
+    if (idx >= 0) (this.anim.objects as any[]).splice(idx, 1);
   }
 }
