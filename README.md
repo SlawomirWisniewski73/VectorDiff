@@ -33,12 +33,6 @@ https://pay.vivawallet.com/scibiz
 - **Integracja z AI** - zoptymalizowany dla animacji generowanych przez AI.
 - **Zastosowania medyczne** - modelowanie molekularne, diagnostyka radiologiczna, chirurgia robotyczna.
 
-### Struktura projektu
-vectordiff/
-├── packages/ # Moduły podstawowe
-├── applications/ # Aplikacje końcowe
-└── tools/ # Narzędzia deweloperskie
-
 ### Współpraca
 Zachęcamy do współpracy! Zobacz `CONTRIBUTING.md` dla zasad i wskazówek.
 
