@@ -1,9 +1,10 @@
-export { Animation } from './animation.js';
-export { ObjectManager } from './objects.js';
-export { TransformManager } from './transforms.js';
-export * from './types.js';
-export * from './utils.js';
-import { Animation } from './animation.js';
+export { Animation } from './animation';
+export { ObjectManager } from './objects';
+export { TransformManager } from './transforms';
+export * from './types';
+export * from './utils';
+import { Animation } from './animation';
+
 export function createAnimation(w: number, h: number, title?: string) {
   return new Animation(w, h, { title });
 }
