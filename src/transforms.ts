@@ -1,5 +1,5 @@
-import { Animation } from './animation.js';
-import { Transform } from './types.js';
+import { Animation } from './animation';
+import { Transform } from './types';
 export class TransformManager {
   constructor(private anim: Animation) {}
   add(objectId: string, when: number, transform: Transform) {
