@@ -1,18 +1,19 @@
 {
-  "name": "vectordiff-monorepo",
+  "name": "@vectordiff/core",
   "version": "1.0.0",
-  "private": true,
-  "workspaces": [
-    "core",
-    "visualization",
-    "packages/*",
-    "applications/*"
-  ],
+  "description": "Minimal VectorDiff core (animations & transforms)",
+  "license": "AGPL-3.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
   "scripts": {
-    "build": "npm run build -ws --if-present",
-    "test": "npm run test -ws --if-present"
+    "build": "tsc",
+    "test": "jest",
+    "dev": "tsc -w"
   },
   "devDependencies": {
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.0",
+    "jest": "^30.0.0",
+    "@types/jest": "^30.0.0"
   }
 }
